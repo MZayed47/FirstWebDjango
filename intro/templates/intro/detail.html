@@ -1,0 +1,151 @@
+{% extends 'intro\base.html' %}
+{% block title %} Person Details {% endblock %}
+
+{% block body %}
+
+<div class="container-fluid songs-container">
+
+    <div class="row">
+
+        <!-- Left Album Info -->
+        <div class="col-sm-5 col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <a href="{% url 'intro:detail' person.id %}">
+                        {% if person.image %}
+                            <img src="{{ person.image.url }}" class="img-responsive">
+                        {% else %}
+                            <h3>No image to display</h3>
+                        {% endif %}
+                    </a>
+                    <h2>{{ person.name }} <small>{{ person.age }}</small></h2>
+                    <h3>{{ person.status }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Song Info -->
+        <div class="col-sm-10 col-md-8">
+
+            <ul class="nav nav-pills" style="margin-bottom: 10px;">
+                <li role="presentation" class="active"><a href="{% url 'intro:detail' person.id %}">View All</a></li>
+                <li role="presentation"><a href="#">Add New Degree</a></li>
+            </ul>
+
+            <div class="panel panel-default">
+                <div class="panel-body">
+
+                    <h3>All Degrees</h3>
+
+                    {% if error_message %}
+                        <p><strong>{{ error_message }}</strong></p>
+                    {% endif %}
+
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Institution</th>
+                            <th>Favorite</th>
+                            <th>Topic</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for got in person.degrees_set.all %}
+                            <tr>
+                                <td>{{ got.degree }}</td>
+                                <td>
+                                    <a target="_blank" href="#">
+                                        <button type="button" class="btn btn-success btn-xs">
+                                            <span class="glyphicon glyphicon-eye-open"></span>&nbsp; Check
+                                        </button>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="#" class="btn-favorite"><span class="glyphicon glyphicon-star {% if got.is_favourite %}active{% endif %}"></span></a>
+                                </td>
+                                <td>
+                                    <form action="#" method="post" style="display: inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="got_id" value="{{ got.id }}">
+                                        <button type="submit" class="btn btn-danger btn-xs">
+                                            <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+<!--
+
+    <img src="{{ person.image }}" height="200" width="300">
+    <h1> {{ person.name }}</h1>
+    <h3> Status : {{ person.status }} </h3>
+    <h3> Degrees : </h3>
+
+    {% if error_message %}
+    <p> <strong> {{ error_message }} </strong> </p>
+    {% endif %}
+
+    <ul>
+        {% for got in person.degrees_set.all %}
+        <li>{{ got.degree }}</li>
+        {% endfor %}
+    </ul>
+
+    <br>
+    <a href="{% url 'intro:index' %}"> Go back to homepage </a>
+
+<br>
+<br>
+
+-->
+
+
+
+<!--
+
+    <h1> {{ person.name }}</h1>
+    <h2> Status : {{ person.status }} </h2>
+    <h2> Degrees : </h2>
+
+    {% if error_message %}
+    <p> <strong> {{ error_message }} </strong> </p>
+    {% endif %}
+
+    <form action="{% url 'intro:favourite' person.id %}" method="post">
+        {% csrf_token %}
+
+        {% for degrees in person.education_set.all %}
+            <input type="radio" name="degrees" id="degrees{{ forloop.counter }}" value="{{ degrees.id }}">
+            <label for="degrees{{ forloop.counter }}">
+                {{ degrees.degree }}
+                {% if degrees.is_favourite %}
+                    *
+                {% endif %}
+            </label>
+            <br>
+        {% endfor %}
+
+        <br>
+        <input type="submit" value="Choose Favourite">
+    </form>
+
+    <br>
+    <a href="{% url 'intro:index' %}"> Go back to homepage </a>
+
+-->

@@ -1,0 +1,10 @@
+{% if all_question %}
+<h2> Here are all the subject list: </h2>
+    <ul>
+    {% for question in all_question %}
+        <li> <a href="{% url 'polls:detail' question.id %}"> {{ question.subject }} </a> </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
